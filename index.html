@@ -158,6 +158,26 @@
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
   }
+
+  /* ---------- Feier-Overlay ---------- */
+  .celebrate{
+    position:fixed;inset:0;z-index:80;display:grid;place-items:center;
+    background:rgba(6,10,14,.86);
+  }
+  .celebrate[hidden]{display:none}
+  .celebrate canvas{position:absolute;inset:0;width:100%;height:100%}
+  .celebrate-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px}
+  .celebrate-text{display:flex;gap:.06em;font-family:var(--sans);font-weight:800;line-height:1;font-size:clamp(64px,18vw,180px)}
+  .celebrate-text .letter{
+    display:inline-block;transform:translateY(30px) scale(.6);opacity:0;
+    animation:letterPop .5s cubic-bezier(.2,1.4,.4,1) forwards;
+    text-shadow:0 6px 26px rgba(0,0,0,.6);
+  }
+  .celebrate-text .letter:nth-child(1){color:#D0483F;animation-delay:0s}
+  .celebrate-text .letter:nth-child(2){color:#F4F7F9;animation-delay:.12s}
+  .celebrate-text .letter:nth-child(3){color:#5C7CFA;animation-delay:.24s}
+  @keyframes letterPop{to{transform:translateY(0) scale(1);opacity:1}}
+  .celebrate-sub{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);text-align:center}
 </style>
 </head>
 <body>
@@ -233,6 +253,15 @@
       </div>
     </aside>
   </main>
+
+  <div class="celebrate" id="celebrate" hidden role="dialog" aria-modal="true" aria-label="Alle Staaten geschafft">
+    <canvas id="fwCanvas"></canvas>
+    <div class="celebrate-inner">
+      <div class="celebrate-text"><span class="letter">U</span><span class="letter">S</span><span class="letter">A</span></div>
+      <p class="celebrate-sub" id="celebrateSub"></p>
+      <button class="btn btn-solid" id="celebrateClose">Weiter</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -321,7 +350,7 @@ function matchState(input){
     if(norm(n)===q) return {name:n,typo:false};
     if((DATA[n].de||[]).some(a=>norm(a)===q)) return {name:n,typo:false};
   }
-  const tol = q.length<=6 ? 1 : 2;
+  const tol = q.length<=5 ? 1 : q.length<=9 ? 2 : 3;
   const hits = NAMES.filter(n=>{
     const cands=[n,...(DATA[n].de||[])];
     return cands.some(c=>lev(norm(c),q)<=tol);
@@ -337,7 +366,7 @@ const shuffle = a => {
 
 /* ---------- Zustand ---------- */
 function freshSession(){
-  return {queue:shuffle(NAMES),current:null,solved:new Set(),missed:new Set(),hints:0,wrong:0,score:0,streak:0,revealed:0,locked:false,choicesShown:false};
+  return {queue:shuffle(NAMES),current:null,solved:new Set(),missed:new Set(),hints:0,wrong:0,score:0,streak:0,revealed:0,locked:false,choicesShown:false,celebrated:false};
 }
 const S = {mode:"find", find:freshSession(), name:freshSession()};
 const cur = () => S[S.mode];
@@ -512,6 +541,7 @@ function onPickFind(name){
     flash(name,"flash-ok",520);
     say(`Richtig — <b>${name}</b>. +${p} Punkt${p===1?"":"e"}.`,"ok");
     s.locked=true;
+    if(s.solved.size===50 && !s.celebrated){ s.celebrated=true; celebrate(); }
     setTimeout(nextFind,650);
   }else{
     s.wrong++;
@@ -561,9 +591,10 @@ function checkName(){
     const p=award();
     s.solved.add(s.current);
     flash(s.current,"flash-ok",520);
-    say(`${m.typo?"Zählt trotz Tippfehler: ":"Richtig — "}<b>${s.current}</b>. +${p} Punkt${p===1?"":"e"}.`,"ok");
+    say(`${m.typo?`Kleiner Tippfehler, zählt trotzdem — richtige Schreibweise: `:"Richtig — "}<b>${s.current}</b>. +${p} Punkt${p===1?"":"e"}.`,"ok");
     s.current=null; answer.value="";
     render();
+    if(s.solved.size===50 && !s.celebrated){ s.celebrated=true; celebrate(); }
     return;
   }
   s.wrong++;
@@ -657,6 +688,80 @@ zoomBtn.addEventListener("click",()=>{
   svg.setAttribute("viewBox",zoomed?NE_VIEW:FULL_VIEW);
   zoomBtn.textContent=zoomed?"Ganze USA zeigen":"Nordosten heranzoomen";
 });
+
+/* ---------- Feier: USA-Feuerwerk bei perfekter Runde ---------- */
+const celebrateEl = el("celebrate");
+const celebrateSub = el("celebrateSub");
+const fwCanvas = el("fwCanvas");
+const fwCtx = fwCanvas.getContext("2d");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FLAG_COLORS = ["#D0483F","#F4F7F9","#5C7CFA"];
+let fwParticles = [];
+let fwRunning = false;
+let fwRAF = null;
+let fwLauncher = null;
+
+function fwResize(){
+  fwCanvas.width = celebrateEl.clientWidth;
+  fwCanvas.height = celebrateEl.clientHeight;
+}
+
+function fwSpawnBurst(x,y){
+  const n = 46;
+  for(let i=0;i<n;i++){
+    const a = (Math.PI*2*i)/n + Math.random()*0.3;
+    const speed = 2+Math.random()*3.6;
+    fwParticles.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life:1,color:FLAG_COLORS[Math.floor(Math.random()*FLAG_COLORS.length)]});
+  }
+}
+
+function fwStep(){
+  fwCtx.clearRect(0,0,fwCanvas.width,fwCanvas.height);
+  for(const p of fwParticles){
+    p.vy += 0.035; p.x += p.vx; p.y += p.vy; p.life -= 0.012;
+  }
+  fwParticles = fwParticles.filter(p=>p.life>0);
+  for(const p of fwParticles){
+    fwCtx.globalAlpha = Math.max(p.life,0);
+    fwCtx.fillStyle = p.color;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x,p.y,2.4,0,Math.PI*2);
+    fwCtx.fill();
+  }
+  fwCtx.globalAlpha = 1;
+  if(fwRunning) fwRAF = requestAnimationFrame(fwStep);
+}
+
+function fwLaunchLoop(){
+  const w = fwCanvas.width, h = fwCanvas.height;
+  fwSpawnBurst(w*(0.15+Math.random()*0.7), h*(0.2+Math.random()*0.45));
+  fwLauncher = setTimeout(fwLaunchLoop, 380+Math.random()*420);
+}
+
+function celebrate(){
+  celebrateSub.textContent = `Alle 50 Bundesstaaten ${S.mode==="find"?"gefunden":"korrekt benannt"} — Glückwunsch!`;
+  celebrateEl.hidden = false;
+  fwResize();
+  fwParticles = [];
+  if(!reduceMotion){
+    fwRunning = true;
+    fwStep();
+    fwLaunchLoop();
+  }
+}
+
+function stopCelebrate(){
+  celebrateEl.hidden = true;
+  fwRunning = false;
+  if(fwRAF) cancelAnimationFrame(fwRAF);
+  if(fwLauncher) clearTimeout(fwLauncher);
+  fwParticles = [];
+}
+
+window.addEventListener("resize",()=>{ if(!celebrateEl.hidden) fwResize(); });
+el("celebrateClose").addEventListener("click", stopCelebrate);
+celebrateEl.addEventListener("click", e=>{ if(e.target===celebrateEl) stopCelebrate(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !celebrateEl.hidden) stopCelebrate(); });
 
 /* ---------- Start ---------- */
 nextFind();
