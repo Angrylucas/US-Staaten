@@ -342,6 +342,14 @@
           <span class="menu-card-title">Italien</span>
           <span class="menu-card-sub">20 Regionen</span>
         </button>
+        <button class="menu-card" data-country="se">
+          <span class="menu-card-title">Schweden</span>
+          <span class="menu-card-sub">21 Provinzen</span>
+        </button>
+        <button class="menu-card" data-country="jp">
+          <span class="menu-card-title">Japan</span>
+          <span class="menu-card-sub">47 Präfekturen</span>
+        </button>
       </div>
     </div>
   </div>
@@ -525,6 +533,80 @@ const DATA_IT = {
 "Toskana":{ab:"TOS",cap:"Florenz",lage:"Mitte-Westen, an der Tyrrhenischen Küste.",form:"Hügelig, mit dem schiefen Turm von Pisa im Westen.",fakt:"Wiege der Renaissance; der Schiefe Turm von Pisa steht hier.",merk:"„Tuscany“ (Toskana) kommt von den Etruskern, die hier lebten."},
 "Umbrien":{ab:"UMB",cap:"Perugia",lage:"Mitte, einzige Region ohne Meerzugang neben dem Aostatal.",form:"Kompakt, „das grüne Herz Italiens“.",fakt:"Assisi, Geburtsort des Heiligen Franziskus, liegt hier.",merk:"„Das grüne Herz Italiens“ — mitten im Land, ohne Küste."},
 "Venetien":{ab:"VEN",cap:"Venedig",lage:"Nordosten, an der Adria.",form:"Breit, mit der Lagune von Venedig im Südosten.",fakt:"Venedig mit seinen Kanälen ist UNESCO-Weltkulturerbe.",merk:"Venedig gab der ganzen Region ihren Namen."},
+};
+
+const DATA_SE = {
+"Blekinge":{ab:"K",cap:"Karlskrona",lage:"Südküste, kleinste Landschaft im Südosten.",form:"Kleines, zerklüftetes Küstenland mit vielen Schären.",fakt:"Karlskrona war lange Hauptstützpunkt der schwedischen Marine.",merk:"Kleinstes Län Schwedens an der Ostseeküste."},
+"Dalarna":{ab:"W",cap:"Falun",lage:"Mittelschweden, um den Fluss Dalälven.",form:"Grosses, waldreiches Binnenland.",fakt:"Die roten Dalapferde (Dalahäst) sind ein Nationalsymbol Schwedens.",merk:"„Dal“ = Tal — das Tal des Dalälven."},
+"Gävleborg":{ab:"X",cap:"Gävle",lage:"Mittelschweden, an der Ostseeküste an der Grenze zu Norrland.",form:"Küstenstreifen mit Waldhinterland.",fakt:"Gävle ist bekannt für den riesigen Weihnachtsbock (Gävlebocken).",merk:"Grenze zwischen Svealand und Norrland verläuft hier."},
+"Gotland":{ab:"I",cap:"Visby",lage:"Insel in der Ostsee, östlich vom Festland.",form:"Längliche Insel.",fakt:"Visby, die Hauptstadt, ist eine gut erhaltene mittelalterliche Hansestadt (UNESCO).",merk:"Grösste Insel Schwedens — beliebtes Sommerziel."},
+"Halland":{ab:"N",cap:"Halmstad",lage:"Südwestküste am Kattegat.",form:"Schmaler Küstenstreifen.",fakt:"Bekannt für lange Sandstrände und Kartoffelanbau.",merk:"Liegt zwischen Skåne und Göteborg an der Westküste."},
+"Jämtland":{ab:"Z",cap:"Östersund",lage:"Mittelschweden, an der norwegischen Grenze.",form:"Grosses Bergland.",fakt:"Der Wintersportort Åre liegt hier.",merk:"Historisch lange eigenständig, bevor es zu Schweden kam."},
+"Jönköping":{ab:"F",cap:"Jönköping",lage:"Südschweden, am Südspitze des Vättern-Sees.",form:"Kompakt, um den See Vättern.",fakt:"Weltbekannt für Streichhölzer — hier wurde das Sicherheitszündholz erfunden.",merk:"Liegt am Südende des zweitgrössten Sees Schwedens."},
+"Kalmar":{ab:"H",cap:"Kalmar",lage:"Südostküste, gegenüber von Öland.",form:"Küstenland mit der vorgelagerten Insel Öland.",fakt:"Das Kalmarer Schloss war Schauplatz der Kalmarer Union 1397.",merk:"Die Insel Öland gehört auch zu diesem Län."},
+"Kronoberg":{ab:"G",cap:"Växjö",lage:"Südschweden, waldreiches „Glasreich“ (Småland).",form:"Waldreiches Binnenland ohne Meerzugang.",fakt:"Das „Glasreich“ mit berühmten Glashütten wie Kosta Boda liegt hier.",merk:"„Krone“-berg — nach der schwedischen Krone benannt."},
+"Norrbotten":{ab:"BD",cap:"Luleå",lage:"Äusserster Norden, hinter dem Polarkreis.",form:"Flächengrösstes Län, dünn besiedelt.",fakt:"Kiruna mit seinem Eisenerzbergwerk liegt hier — auch die Mitternachtssonne ist sichtbar.",merk:"„Norr“ = Norden — nördlichstes Län Schwedens."},
+"Örebro":{ab:"T",cap:"Örebro",lage:"Mittelschweden, am See Hjälmaren.",form:"Kompakt, zentral gelegen.",fakt:"Örebro Schloss liegt mitten im Fluss Svartån.",merk:"Zentral gelegen — nicht zu verwechseln mit Öland."},
+"Östergötland":{ab:"E",cap:"Linköping",lage:"Südostschweden, an der Ostsee.",form:"Breites Küsten- und Seenland.",fakt:"Linköping ist Sitz von Saab und einer bekannten Universität.",merk:"„Öster“ = östlich — das östliche Gegenstück zu Västergötland."},
+"Skåne":{ab:"M",cap:"Malmö",lage:"Südlichste Spitze Schwedens, an Dänemark (Öresundbrücke).",form:"Flach, kompakt, südlichste Region.",fakt:"Die Öresundbrücke verbindet Malmö mit Kopenhagen.",merk:"Historisch dänisch — daher ein unverwechselbarer eigener Dialekt."},
+"Södermanland":{ab:"D",cap:"Nyköping",lage:"Mittelschweden, südlich von Stockholm.",form:"Küsten- und Seenland südlich der Hauptstadt.",fakt:"Nyköping war einst eine bedeutende Königsstadt.",merk:"„Söder“ = Süden — südlich von Stockholm."},
+"Stockholm":{ab:"AB",cap:"Stockholm",lage:"Ostküste, Hauptstadtregion.",form:"Kompakt, mit dem Stockholmer Schärengarten im Osten.",fakt:"Stockholm, „Venedig des Nordens“, liegt auf 14 Inseln.",merk:"Hauptstadt Schwedens und bevölkerungsreichstes Län."},
+"Uppsala":{ab:"C",cap:"Uppsala",lage:"Nördlich von Stockholm.",form:"Kompakt, flaches Ackerland.",fakt:"Die Universität Uppsala (1477) ist die älteste Skandinaviens.",merk:"Alte Krönungsstadt schwedischer Könige."},
+"Värmland":{ab:"S",cap:"Karlstad",lage:"Westschweden, an Norwegen grenzend.",form:"Waldreiches Grenzland um den Vänern-See.",fakt:"Heimat der Schriftstellerin Selma Lagerlöf.",merk:"Grenzland zu Norwegen, viele Seen und Wälder."},
+"Västerbotten":{ab:"AC",cap:"Umeå",lage:"Nordschweden, an der Ostseeküste.",form:"Langes Küsten- und Binnenland.",fakt:"Berühmt für den strengriechenden Käse „Västerbottenost“.",merk:"„Väster“ = Westen, benannt nach der alten Landschaft westlich der Küste."},
+"Västernorrland":{ab:"Y",cap:"Härnösand",lage:"Mittelnorrland, an der Ostseeküste.",form:"Küstenland mit der „Hohen Küste“ (Höga Kusten).",fakt:"Die Höga Kusten (Hohe Küste) ist UNESCO-Weltnaturerbe.",merk:"Bekannt für die dramatische Hügellandschaft der „Hohen Küste“ am Meer."},
+"Västmanland":{ab:"U",cap:"Västerås",lage:"Mittelschweden, westlich von Stockholm.",form:"Kompaktes Binnenland am Mälarsee.",fakt:"Västerås, die Hauptstadt, ist ein bedeutender Industriestandort (ABB).",merk:"Västerås war einst Bischofssitz und ist heute Industriestadt am Mälarsee."},
+"Västra Götaland":{ab:"O",cap:"Göteborg",lage:"Westschweden, grösstes Län nach Bevölkerung nach Stockholm.",form:"Grosses Gebiet um Göteborg und den Vänern-See.",fakt:"Göteborg ist Skandinaviens grösster Hafen.",merk:"1998 aus mehreren alten Län fusioniert — daher besonders gross."},
+};
+
+const DATA_JP = {
+"Hokkaido":{ab:"01",cap:"Sapporo",lage:"Nördlichste Hauptinsel Japans.",form:"Grösste und nördlichste Präfektur, eigene Insel.",fakt:"Bekannt für Schnee, das Sapporo-Schneefest und Lavendelfelder in Furano.",merk:"Einzige Präfektur, die eine ganze Hauptinsel für sich allein ist."},
+"Aomori":{ab:"02",cap:"Aomori",lage:"Nordspitze der Hauptinsel Honshu.",form:"Spitz zulaufend, oben an der Tsugaru-Strasse zu Hokkaido.",fakt:"Bekannt für Äpfel — grösster Apfelproduzent Japans.",merk:"Nördlichste Präfektur auf Honshu, direkt gegenüber Hokkaido."},
+"Iwate":{ab:"03",cap:"Morioka",lage:"Nordosten Honshus (Tohoku), Pazifikküste.",form:"Zweitgrösste Präfektur Japans.",fakt:"Die zerklüftete Rias-Küste Sanriku wurde 2011 vom Tsunami schwer getroffen.",merk:"Hauptstadt Morioka, nicht Iwate — anders als die meisten Präfekturen."},
+"Miyagi":{ab:"04",cap:"Sendai",lage:"Nordosten (Tohoku), Pazifikküste.",form:"Küstenland mit der Bucht von Sendai.",fakt:"Sendai ist die grösste Stadt Nordostjapans.",merk:"Hauptstadt heisst Sendai, nicht Miyagi."},
+"Akita":{ab:"05",cap:"Akita",lage:"Nordwesten Honshus (Tohoku), Japanisches Meer.",form:"Küstenstreifen am Japanischen Meer.",fakt:"Bekannt für Reisanbau und die Akita-Hunderasse.",merk:"Namensgeberin der Akita-Hunderasse."},
+"Yamagata":{ab:"06",cap:"Yamagata",lage:"Nordwesten (Tohoku), Japanisches Meer.",form:"Bergland zwischen Akita und Fukushima.",fakt:"Berühmt für Kirschen (Sakuranbo) und Onsen-Thermalbäder.",merk:"„Yama“ = Berg — bergige Präfektur."},
+"Fukushima":{ab:"07",cap:"Fukushima",lage:"Südliches Tohoku, Pazifikküste.",form:"Grosse Präfektur mit drei Landesteilen (Hama, Naka, Aizu).",fakt:"2011 Schauplatz des Reaktorunfalls nach dem Tōhoku-Erdbeben.",merk:"„Fuku“ = Glück — trotz des Unglücks 2011 im Namen enthalten."},
+"Ibaraki":{ab:"08",cap:"Mito",lage:"Nordöstlich von Tokio, Pazifikküste.",form:"Flach, mit dem See Kasumigaura.",fakt:"Der Kasumigaura ist Japans zweitgrösster See.",merk:"Hauptstadt Mito, berühmt für den Garten Kairaku-en."},
+"Tochigi":{ab:"09",cap:"Utsunomiya",lage:"Nördlich von Tokio, Binnenland.",form:"Kompakt, ohne Meerzugang.",fakt:"Der Nikko-Schrein, UNESCO-Welterbe, liegt hier.",merk:"Hauptstadt Utsunomiya, bekannt für Gyoza (Teigtaschen)."},
+"Gunma":{ab:"10",cap:"Maebashi",lage:"Nordwestlich von Tokio, Binnenland.",form:"Kompakt, gebirgig im Norden.",fakt:"Die Seidenfabrik Tomioka ist UNESCO-Weltkulturerbe.",merk:"Hauptstadt Maebashi — Nachbarpräfektur von Tochigi."},
+"Saitama":{ab:"11",cap:"Saitama",lage:"Direkt nördlich von Tokio.",form:"Kompakt, dicht besiedeltes Vorortland Tokios.",fakt:"Grösstenteils Vorstadtregion der Metropole Tokio.",merk:"Wortspiel: „Saitama“ klingt in japanischen Sitcoms nach „weit weg von allem“ — dabei direkt neben Tokio."},
+"Chiba":{ab:"12",cap:"Chiba",lage:"Östlich von Tokio, Halbinsel Boso.",form:"Halbinsel, die die Bucht von Tokio im Osten begrenzt.",fakt:"Der Flughafen Narita und Tokyo Disneyland liegen in Chiba.",merk:"Tokyo Disneyland liegt NICHT in Tokio, sondern in Chiba!"},
+"Tokio":{ab:"13",cap:"Tokio",lage:"Zentrale Pazifikküste, Hauptstadtregion.",form:"Kompakt, mit den Izu-Inseln weit im Süden zugehörig.",fakt:"Bevölkerungsreichste Metropolregion der Welt.",merk:"Hauptstadt Japans — offiziell eine „Präfektur“, keine gewöhnliche Stadt."},
+"Kanagawa":{ab:"14",cap:"Yokohama",lage:"Südwestlich von Tokio, Pazifikküste.",form:"Kompakt, mit der Halbinsel Miura im Süden.",fakt:"Yokohama ist Japans zweitgrösste Stadt; Kamakura war einst Shogunatssitz.",merk:"Berühmt durch Hokusais Farbholzschnitt „Die grosse Welle vor Kanagawa“."},
+"Niigata":{ab:"15",cap:"Niigata",lage:"Zentrales Japanisches Meer, gegenüber Tokio.",form:"Lang gestreckt an der Küste, mit Sado-Insel.",fakt:"Grösster Reisproduzent Japans, Herkunft des Sake-Reis.",merk:"Schneereichste grosse Stadt der Welt."},
+"Toyama":{ab:"16",cap:"Toyama",lage:"Zentrales Japanisches Meer.",form:"Bucht-Halbkreis, umrahmt von den Nordalpen.",fakt:"Die Tateyama-Kurobe-Alpenroute führt durch meterhohe Schneewände.",merk:"Bekannt für Pharma-Industrie und die Schneewände von Tateyama."},
+"Ishikawa":{ab:"17",cap:"Kanazawa",lage:"Zentrales Japanisches Meer, Halbinsel Noto.",form:"Lang gestreckte Halbinsel (Noto) nach Norden.",fakt:"Kanazawa gilt als „Klein-Kyoto“ mit dem berühmten Kenroku-en-Garten.",merk:"Die Halbinsel Noto ragt weit ins Japanische Meer."},
+"Fukui":{ab:"18",cap:"Fukui",lage:"Zentrales Japanisches Meer, südlich von Ishikawa.",form:"Kompakt, an der Wakasa-Bucht.",fakt:"Wichtiger Dinosaurier-Fundort Japans (Fukui-Saurier).",merk:"Viele Atomkraftwerke liegen an der Küste Fukuis."},
+"Yamanashi":{ab:"19",cap:"Kofu",lage:"Westlich von Tokio, Binnenland.",form:"Kompakt, mit dem Fuji im Süden.",fakt:"Der Mount Fuji liegt teils in Yamanashi.",merk:"„Yama-nashi“ klingt wie „ohne Berg“ — dabei liegt der Fuji hier!"},
+"Nagano":{ab:"20",cap:"Nagano",lage:"Zentraljapan, Binnenland, Japanische Alpen.",form:"Grosse Bergpräfektur ohne Meerzugang.",fakt:"Austragungsort der Olympischen Winterspiele 1998.",merk:"„Schneeaffen“ (badende Makaken) im Jigokudani-Park sind berühmt."},
+"Gifu":{ab:"21",cap:"Gifu",lage:"Zentraljapan, Binnenland.",form:"Kompakt, mit den Japanischen Alpen im Norden.",fakt:"Shirakawa-go mit seinen Bauernhäusern im Gassho-Stil ist UNESCO-Welterbe.",merk:"Grenzt an sieben andere Präfekturen — Rekord in Japan."},
+"Shizuoka":{ab:"22",cap:"Shizuoka",lage:"Zwischen Tokio und Nagoya, Pazifikküste.",form:"Lang gestreckte Küste mit dem Fuji im Nordosten.",fakt:"Die meistfotografierte Fuji-Aussicht liegt hier; grösster Teeanbau Japans.",merk:"Der Mount Fuji ist ihr bekanntestes Wahrzeichen (mit Yamanashi geteilt)."},
+"Aichi":{ab:"23",cap:"Nagoya",lage:"Zentraljapan, Pazifikküste.",form:"Kompakt, um die Bucht von Ise/Nagoya.",fakt:"Nagoya ist Zentrum der japanischen Autoindustrie (Toyota).",merk:"Toyota-Stadt liegt hier — daher der Firmenname."},
+"Mie":{ab:"24",cap:"Tsu",lage:"Zentraljapan, Ostküste der Kii-Halbinsel.",form:"Lang gestreckt an der Ise-Bucht.",fakt:"Der Ise-Schrein ist der wichtigste Shinto-Schrein Japans.",merk:"Hauptstadt Tsu — kürzester Städtename Japans."},
+"Shiga":{ab:"25",cap:"Otsu",lage:"Zentraljapan, Binnenland um den Biwa-See.",form:"Kompakt, ganz um den grössten See Japans.",fakt:"Der Biwa-See ist der grösste See Japans.",merk:"Hauptstadt Otsu liegt direkt am Biwa-See."},
+"Kyoto":{ab:"26",cap:"Kyoto",lage:"Zentraljapan (Kansai), am Japanischen Meer und im Binnenland.",form:"Lang gestreckt von der Küste bis ins Binnenland.",fakt:"Kyoto war über 1000 Jahre die Kaiserstadt Japans, reich an Tempeln.",merk:"Frühere Hauptstadt Japans, bevor Tokio es wurde."},
+"Osaka":{ab:"27",cap:"Osaka",lage:"Kansai-Region, Bucht von Osaka.",form:"Kleine, dicht besiedelte Präfektur.",fakt:"Bekannt für Streetfood wie Takoyaki und die Burg Osaka.",merk:"Japans „Küche der Nation“ (Tenka no Daidokoro)."},
+"Hyogo":{ab:"28",cap:"Kobe",lage:"Kansai-Region, an zwei Meeren (Japanisches Meer und Seto-Inlandsee).",form:"Breites Band von Meer zu Meer.",fakt:"Die Burg Himeji, „Weißer Reiher“, ist UNESCO-Weltkulturerbe.",merk:"Hauptstadt Kobe — berühmt für Kobe-Rind."},
+"Nara":{ab:"29",cap:"Nara",lage:"Kansai-Region, Binnenland.",form:"Kompakt, ohne Meerzugang.",fakt:"Erste dauerhafte Hauptstadt Japans (710–784); frei laufende Rehe im Nara-Park.",merk:"Älteste Hauptstadt Japans vor Kyoto."},
+"Wakayama":{ab:"30",cap:"Wakayama",lage:"Südspitze der Halbinsel Kii.",form:"Spitz zulaufende Halbinsel-Südspitze.",fakt:"Die Pilgerwege Kumano Kodo sind UNESCO-Weltkulturerbe.",merk:"Bildet die Südspitze der Kii-Halbinsel."},
+"Tottori":{ab:"31",cap:"Tottori",lage:"Chugoku-Region, Japanisches Meer.",form:"Schmaler Küstenstreifen.",fakt:"Die Sanddünen von Tottori sind die grössten Japans.",merk:"Einzige Präfektur mit echten Wüstendünen am Meer."},
+"Shimane":{ab:"32",cap:"Matsue",lage:"Chugoku-Region, Japanisches Meer, westlich von Tottori.",form:"Lang gestreckte Küste mit vorgelagerten Oki-Inseln.",fakt:"Der Izumo-Schrein gehört zu den ältesten Shinto-Schreinen Japans.",merk:"Bevölkerungsärmste Präfektur Japans nach Tottori."},
+"Okayama":{ab:"33",cap:"Okayama",lage:"Chugoku-Region, Seto-Inlandsee.",form:"Kompakt an der Inlandsee.",fakt:"Die Kunstinsel Naoshima ist berühmt für zeitgenössische Kunst.",merk:"Heimat der Sage von Momotaro, dem Pfirsichjungen."},
+"Hiroshima":{ab:"34",cap:"Hiroshima",lage:"Chugoku-Region, Seto-Inlandsee.",form:"Breit, mit vorgelagerten Inseln (Miyajima).",fakt:"1945 Ziel der ersten Atombombe; der Friedenspark ist UNESCO-Welterbe.",merk:"Der schwimmende Torii von Miyajima ist weltberühmt."},
+"Yamaguchi":{ab:"35",cap:"Yamaguchi",lage:"Westspitze Honshus, an zwei Meeren.",form:"Spitz zulaufende Westspitze Honshus.",fakt:"Die Kintai-Brücke mit fünf Holzbögen ist berühmt.",merk:"Bildet die Westspitze von Honshu, gegenüber Kyushu."},
+"Tokushima":{ab:"36",cap:"Tokushima",lage:"Shikoku, Nordosten.",form:"Kompakt, an der Naruto-Meerenge.",fakt:"Die Naruto-Strudel in der Meerenge sind berühmt.",merk:"Bekannt für den Awa-Odori-Tanzsommer."},
+"Kagawa":{ab:"37",cap:"Takamatsu",lage:"Shikoku, Nordosten, Seto-Inlandsee.",form:"Kleinste Präfektur Japans.",fakt:"Berühmt für Udon-Nudeln — „Udon-Präfektur“.",merk:"Flächenmässig kleinste Präfektur Japans."},
+"Ehime":{ab:"38",cap:"Matsuyama",lage:"Shikoku, Nordwesten.",form:"Lang gestreckt an der Seto-Inlandsee.",fakt:"Dogo Onsen gilt als eine der ältesten Thermalquellen Japans.",merk:"Bekannt für Mikan-Mandarinen."},
+"Kochi":{ab:"39",cap:"Kochi",lage:"Shikoku, Südküste am Pazifik.",form:"Breite Südküste Shikokus.",fakt:"Heimat des Samurai Sakamoto Ryoma, wichtige Figur der Meiji-Restauration.",merk:"Einzige Präfektur, die ganz Shikokus Südküste einnimmt."},
+"Fukuoka":{ab:"40",cap:"Fukuoka",lage:"Nordküste Kyushus.",form:"Kompakt, bevölkerungsreichste Präfektur Kyushus.",fakt:"Bekannt für Tonkotsu-Ramen aus Hakata.",merk:"Tor zu Kyushu und wichtigster Hafen der Insel."},
+"Saga":{ab:"41",cap:"Saga",lage:"Nordwesten Kyushus.",form:"Kleine Präfektur zwischen Fukuoka und Nagasaki.",fakt:"Berühmt für Imari- und Arita-Porzellan.",merk:"Eine der kleineren, weniger bekannten Präfekturen Kyushus."},
+"Nagasaki":{ab:"42",cap:"Nagasaki",lage:"Westküste Kyushus, viele Inseln.",form:"Extrem zerklüftete Küste mit unzähligen Inseln.",fakt:"1945 Ziel der zweiten Atombombe; historischer Kontaktpunkt zu Europa (Dejima).",merk:"Meiste Inseln aller japanischen Präfekturen."},
+"Kumamoto":{ab:"43",cap:"Kumamoto",lage:"Zentral-Kyushu, an der Ariake-See.",form:"Kompakt, mit dem Vulkan Aso im Osten.",fakt:"Der Aso-Vulkan hat eine der grössten Calderas der Welt.",merk:"Maskottchen Kumamon stammt aus dieser Präfektur."},
+"Oita":{ab:"44",cap:"Oita",lage:"Nordost-Kyushu.",form:"Küstenland mit vielen Onsen im Landesinneren.",fakt:"Beppu ist Japans grösstes Onsen-Thermalgebiet.",merk:"„Onsen-Präfektur“ — meiste heisse Quellen Japans."},
+"Miyazaki":{ab:"45",cap:"Miyazaki",lage:"Südost-Kyushu, Pazifikküste.",form:"Lang gestreckte Ostküste Kyushus.",fakt:"Bekannt für subtropisches Klima und Mangoanbau.",merk:"Milde Winter machen sie zum Trainingsort für Sportmannschaften."},
+"Kagoshima":{ab:"46",cap:"Kagoshima",lage:"Südspitze Kyushus, mit Inselkette Richtung Okinawa.",form:"Zweigeteilte Bucht (Kagoshima-Bucht) mit dem Vulkan Sakurajima.",fakt:"Der Vulkan Sakurajima raucht fast täglich über der Stadt Kagoshima.",merk:"Südlichster Punkt Kyushus, Startpunkt der Ryukyu-Inselkette."},
+"Okinawa":{ab:"47",cap:"Naha",lage:"Südlichste Präfektur, subtropische Inselkette.",form:"Kette vieler kleiner Inseln, weit südlich der Hauptinseln.",fakt:"Bis 1972 unter US-Verwaltung; eigene Ryukyu-Kultur und -Sprache.",merk:"Einzige tropische Präfektur Japans, weit im Süden."},
 };
 
 const GEO_CH = {
@@ -1403,6 +1485,10 @@ const COUNTRY_CONFIG = {
     flagKind:"letters", flagLabel:"AU", flagColors:["#00247D","#F4F7F9","#E4002B"]},
   it:{data:DATA_IT, geo:GEO_IT, view:IT_VIEW, shield:"20", tag:"Die 20 Regionen Italiens", title:"Staatenkunde — Italiens Regionen lernen",
     flagKind:"letters", flagLabel:"IT", flagColors:["#008C45","#F4F7F9","#CD212A"]},
+  se:{data:DATA_SE, geo:GEO_SE, view:SE_VIEW, shield:"21", tag:"Die 21 Provinzen Schwedens", title:"Staatenkunde — Schwedens Provinzen lernen",
+    flagKind:"letters", flagLabel:"SE", flagColors:["#006AA7","#FECC02"]},
+  jp:{data:DATA_JP, geo:GEO_JP, view:JP_VIEW, shield:"47", tag:"Die 47 Präfekturen Japans", title:"Staatenkunde — Japans Präfekturen lernen",
+    flagKind:"letters", flagLabel:"JP", flagColors:["#BC002D","#F4F7F9"]},
 };
 
 function selectCountry(id){

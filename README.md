@@ -12,7 +12,8 @@ Statische Seite, deploybar auf Vercel ohne Build-Konfiguration (Root-Verzeichnis
 
 ## Kartendaten
 
-Die Umrisse für Österreich, Kanada, Australien und Italien stammen aus dem
-[`@svg-maps`](https://github.com/VictorCazanave/svg-maps)-Projekt von Victor Cazanave
-(CC-BY-4.0). Schweiz und Deutschland basieren auf vom Nutzer bereitgestellten
-SVG-Dateien, die USA-Geometrie war Teil der ursprünglich hochgeladenen Spieldatei.
+Die Umrisse für Österreich, Kanada, Australien, Italien, Schweden und Japan
+stammen aus dem [`@svg-maps`](https://github.com/VictorCazanave/svg-maps)-Projekt
+von Victor Cazanave (CC-BY-4.0). Schweiz und Deutschland basieren auf vom Nutzer
+bereitgestellten SVG-Dateien, die USA-Geometrie war Teil der ursprünglich
+hochgeladenen Spieldatei.
