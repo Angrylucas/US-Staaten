@@ -103,8 +103,9 @@
   /* ---------- Karte ---------- */
   .mapwrap{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px;position:relative}
   svg#map{display:block;width:100%;height:auto;touch-action:manipulation;overflow:hidden}
+  #map{--map-stroke:1}
   #map .st{
-    fill:var(--land);stroke:var(--asphalt);stroke-width:1;stroke-linejoin:round;
+    fill:var(--land);stroke:var(--asphalt);stroke-width:var(--map-stroke);stroke-linejoin:round;
     cursor:pointer;transition:fill .18s;
   }
   #map .st:hover{fill:var(--land-hi)}
@@ -121,7 +122,7 @@
     text-anchor:middle;dominant-baseline:middle;pointer-events:none;
     paint-order:stroke;stroke:rgba(11,17,23,.85);stroke-width:2.5px;
   }
-  #map .st:focus-visible{outline:none;fill:var(--land-hi);stroke:var(--amber);stroke-width:2}
+  #map .st:focus-visible{outline:none;fill:var(--land-hi);stroke:var(--amber);stroke-width:calc(var(--map-stroke) * 2)}
   #map .st-hit,#map .st-hit:hover,#map .st-hit:focus-visible{fill:transparent;stroke:none}
   .maptools{position:absolute;left:16px;bottom:16px;display:flex;gap:8px}
   .feedback{
@@ -1709,7 +1710,7 @@ const COUNTRY_CONFIG = {
   th:{data:DATA_TH, geo:GEO_TH, view:TH_VIEW, shield:"77", tag:"Die 77 Provinzen Thailands", title:"Staatenkunde — Thailands Provinzen lernen",
     flagKind:"letters", flagLabel:"TH", flagColors:["#A51931","#F4F7F9","#2D2A4A"]},
   eu:{data:DATA_EU, geo:GEO_EU, view:EU_VIEW, shield:"44", tag:"Die 44 Länder Europas", title:"Staatenkunde — die Länder Europas lernen",
-    zoomView:EU_ZOOM_VIEW, zoomLabel:"Kleinstaaten heranzoomen", zoomOutLabel:"Ganz Europa zeigen",
+    zoomView:EU_ZOOM_VIEW, zoomLabel:"Kleinstaaten heranzoomen", zoomOutLabel:"Ganz Europa zeigen", strokeWidth:0.15,
     flagKind:"letters", flagLabel:"EU", flagColors:["#003399","#FFCC00"]},
 };
 
@@ -1725,6 +1726,7 @@ function selectCountry(id){
   zoomed = false;
   zoomBtn.hidden = !cfg.zoomView;
   if(cfg.zoomView) zoomBtn.textContent = zoomInLabel;
+  svg.style.setProperty("--map-stroke", cfg.strokeWidth || 1);
   shieldEl.textContent = cfg.shield;
   tagEl.textContent = cfg.tag;
   document.title = cfg.title;
