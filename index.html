@@ -107,6 +107,7 @@
   #map .st{
     fill:var(--land);stroke:var(--asphalt);stroke-width:var(--map-stroke);stroke-linejoin:round;
     cursor:pointer;transition:fill .18s;
+    -webkit-tap-highlight-color:transparent;
   }
   #map .st:hover{fill:var(--land-hi)}
   #map .st.solved{fill:#20503C;cursor:default}
@@ -122,6 +123,7 @@
     text-anchor:middle;dominant-baseline:middle;pointer-events:none;
     paint-order:stroke;stroke:rgba(11,17,23,.85);stroke-width:2.5px;
   }
+  #map .st:focus{outline:none}
   #map .st:focus-visible{outline:none;fill:var(--land-hi);stroke:var(--amber);stroke-width:calc(var(--map-stroke) * 2)}
   #map .st-hit,#map .st-hit:hover,#map .st-hit:focus-visible{fill:transparent;stroke:none}
   .maptools{position:absolute;left:16px;bottom:16px;display:flex;gap:8px}
@@ -1156,6 +1158,7 @@ const gShapes = document.createElementNS(SVGNS,"g");
 const gLabels = document.createElementNS(SVGNS,"g");
 svg.append(gShapes,gLabels);
 let shapes = {};
+let bboxes = {};
 
 function buildMap(){
   gShapes.textContent="";
@@ -1175,22 +1178,33 @@ function buildMap(){
   }
   // Draw geometrically larger shapes first and smaller ones last, so a tiny
   // enclave/microstate is never hidden beneath a bigger neighbour drawn on top.
-  const bboxes = {};
+  bboxes = {};
   for(const n of NAMES) bboxes[n] = shapes[n].getBBox();
   const byAreaDesc = [...NAMES].sort((a,b)=>(bboxes[b].width*bboxes[b].height)-(bboxes[a].width*bboxes[a].height));
   for(const n of byAreaDesc) gShapes.appendChild(shapes[n]);
 
   // Countries/regions far smaller than the view get an invisible enlarged
-  // hit-circle on top so they stay reliably tappable even when tiny.
+  // hit-circle on top so they stay reliably tappable even when tiny. The
+  // radius is capped by the distance to the nearest other centroid so two
+  // close-together microstates (e.g. San Marino/Vatikanstadt) never overlap.
   const viewW = parseFloat(VIEW_FULL.split(" ")[2]);
-  const minHit = viewW*0.014;
+  const desiredHit = viewW*0.03;
   for(const n of NAMES){
     const bb = bboxes[n];
-    if(Math.max(bb.width,bb.height) >= minHit*2) continue;
+    if(Math.max(bb.width,bb.height) >= desiredHit*2) continue;
+    const [cx,cy] = GEO[n].c;
+    let nearest = Infinity;
+    for(const m of NAMES){
+      if(m===n) continue;
+      const [mx,my] = GEO[m].c;
+      nearest = Math.min(nearest, Math.hypot(cx-mx, cy-my));
+    }
+    const r = Math.min(desiredHit, nearest/2 - 0.05);
+    if(r <= 0) continue;
     const c = document.createElementNS(SVGNS,"circle");
-    c.setAttribute("cx", bb.x+bb.width/2);
-    c.setAttribute("cy", bb.y+bb.height/2);
-    c.setAttribute("r", minHit);
+    c.setAttribute("cx", cx);
+    c.setAttribute("cy", cy);
+    c.setAttribute("r", r);
     c.setAttribute("class","st st-hit");
     c.setAttribute("tabindex","-1");
     c.setAttribute("aria-hidden","true");
@@ -1377,8 +1391,24 @@ el("learnNext").addEventListener("click",()=>{
   renderLearn();
 });
 
+function applyView(){
+  if(S.mode==="find" && S.find.current && bboxes[S.find.current]){
+    const bb = bboxes[S.find.current];
+    const viewW = parseFloat(VIEW_FULL.split(" ")[2]);
+    if(Math.max(bb.width,bb.height) < viewW*0.03){
+      const pad = viewW*0.05;
+      svg.setAttribute("viewBox", `${bb.x-pad} ${bb.y-pad} ${bb.width+pad*2} ${bb.height+pad*2}`);
+      zoomBtn.hidden = true;
+      return;
+    }
+  }
+  zoomBtn.hidden = !VIEW_ZOOM;
+  svg.setAttribute("viewBox", zoomed?VIEW_ZOOM:VIEW_FULL);
+}
+
 function render(){
   if(S.mode==="learn"){ renderLearn(); return; }
+  applyView();
   paint(); renderSign(); renderHints(); renderStats();
 }
 
