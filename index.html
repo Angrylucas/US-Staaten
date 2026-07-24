@@ -1392,12 +1392,13 @@ el("learnNext").addEventListener("click",()=>{
 });
 
 function applyView(){
-  if(S.mode==="find" && S.find.current && bboxes[S.find.current]){
+  if(S.mode==="find" && S.find.current && bboxes[S.find.current] && VIEW_ZOOM){
     const bb = bboxes[S.find.current];
     const viewW = parseFloat(VIEW_FULL.split(" ")[2]);
     if(Math.max(bb.width,bb.height) < viewW*0.03){
-      const pad = viewW*0.05;
-      svg.setAttribute("viewBox", `${bb.x-pad} ${bb.y-pad} ${bb.width+pad*2} ${bb.height+pad*2}`);
+      // Zoom to the shared cluster view (not a box centred on the target itself,
+      // which would give the location away) so several candidates stay visible.
+      svg.setAttribute("viewBox", VIEW_ZOOM);
       zoomBtn.hidden = true;
       return;
     }
