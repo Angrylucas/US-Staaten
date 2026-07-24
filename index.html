@@ -1391,14 +1391,34 @@ el("learnNext").addEventListener("click",()=>{
   renderLearn();
 });
 
+function clusterView(targetName){
+  const [tx,ty] = GEO[targetName].c;
+  const K = 6;
+  const neighbors = NAMES.filter(n=>n!==targetName)
+    .map(n=>{ const [x,y]=GEO[n].c; return {n, d:Math.hypot(x-tx,y-ty)}; })
+    .sort((a,b)=>a.d-b.d)
+    .slice(0,K)
+    .map(o=>o.n);
+  neighbors.push(targetName);
+  let minx=Infinity,miny=Infinity,maxx=-Infinity,maxy=-Infinity;
+  for(const n of neighbors){
+    const bb = bboxes[n];
+    minx=Math.min(minx,bb.x); miny=Math.min(miny,bb.y);
+    maxx=Math.max(maxx,bb.x+bb.width); maxy=Math.max(maxy,bb.y+bb.height);
+  }
+  const w = maxx-minx, h = maxy-miny;
+  const padX = w*0.15+2, padY = h*0.15+2;
+  return `${minx-padX} ${miny-padY} ${w+padX*2} ${h+padY*2}`;
+}
+
 function applyView(){
-  if(S.mode==="find" && S.find.current && bboxes[S.find.current] && VIEW_ZOOM){
+  if(S.mode==="find" && S.find.current && bboxes[S.find.current]){
     const bb = bboxes[S.find.current];
     const viewW = parseFloat(VIEW_FULL.split(" ")[2]);
     if(Math.max(bb.width,bb.height) < viewW*0.03){
-      // Zoom to the shared cluster view (not a box centred on the target itself,
+      // Zoom to a computed neighbourhood (not a box centred on the target itself,
       // which would give the location away) so several candidates stay visible.
-      svg.setAttribute("viewBox", VIEW_ZOOM);
+      svg.setAttribute("viewBox", clusterView(S.find.current));
       zoomBtn.hidden = true;
       return;
     }
