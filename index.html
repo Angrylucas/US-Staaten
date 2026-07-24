@@ -972,6 +972,7 @@ const IT_VIEW = "0 0 610 793";
 const SE_VIEW = "0 0 346 793";
 const JP_VIEW = "0 0 438 516";
 const TH_VIEW = "0 0 560 1025";
+const EU_VIEW = "379.1 167.2 216.4 223.4";
 let VIEW_FULL = FULL_VIEW;
 const COUNTRY_META = {
   usa:{unit:"Staat",unitPl:"Staaten",gender:"m",gen:"des Staates"},
@@ -984,6 +985,7 @@ const COUNTRY_META = {
   se:{unit:"Provinz",unitPl:"Provinzen",gender:"f",gen:"der Provinz"},
   jp:{unit:"Präfektur",unitPl:"Präfekturen",gender:"f",gen:"der Präfektur"},
   th:{unit:"Provinz",unitPl:"Provinzen",gender:"f",gen:"der Provinz"},
+  eu:{unit:"Land",unitPl:"Länder",gender:"n",gen:"des Landes"},
 };
 const cmeta = () => COUNTRY_META[COUNTRY] || COUNTRY_META.usa;
 const unitLabel = plural => plural ? cmeta().unitPl : cmeta().unit;
