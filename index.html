@@ -122,6 +122,7 @@
     paint-order:stroke;stroke:rgba(11,17,23,.85);stroke-width:2.5px;
   }
   #map .st:focus-visible{outline:none;fill:var(--land-hi);stroke:var(--amber);stroke-width:2}
+  #map .st-hit,#map .st-hit:hover,#map .st-hit:focus-visible{fill:transparent;stroke:none}
   .maptools{position:absolute;left:16px;bottom:16px;display:flex;gap:8px}
   .feedback{
     min-height:22px;margin-top:10px;font-size:14px;color:var(--muted);
@@ -1074,7 +1075,11 @@ const SE_VIEW = "0 0 346 793";
 const JP_VIEW = "0 0 438 516";
 const TH_VIEW = "0 0 560 1025";
 const EU_VIEW = "379.1 167.2 216.4 223.4";
+const EU_ZOOM_VIEW = "460.9 297.8 72.9 73.0";
 let VIEW_FULL = FULL_VIEW;
+let VIEW_ZOOM = null;
+let zoomInLabel = "";
+let zoomOutLabel = "";
 const COUNTRY_META = {
   usa:{unit:"Staat",unitPl:"Staaten",gender:"m",gen:"des Staates"},
   ch:{unit:"Kanton",unitPl:"Kantone",gender:"m",gen:"des Kantons",cap:"Hauptort"},
@@ -1166,6 +1171,30 @@ function buildMap(){
     p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();onPick(n);}});
     gShapes.appendChild(p);
     shapes[n]=p;
+  }
+  // Draw geometrically larger shapes first and smaller ones last, so a tiny
+  // enclave/microstate is never hidden beneath a bigger neighbour drawn on top.
+  const bboxes = {};
+  for(const n of NAMES) bboxes[n] = shapes[n].getBBox();
+  const byAreaDesc = [...NAMES].sort((a,b)=>(bboxes[b].width*bboxes[b].height)-(bboxes[a].width*bboxes[a].height));
+  for(const n of byAreaDesc) gShapes.appendChild(shapes[n]);
+
+  // Countries/regions far smaller than the view get an invisible enlarged
+  // hit-circle on top so they stay reliably tappable even when tiny.
+  const viewW = parseFloat(VIEW_FULL.split(" ")[2]);
+  const minHit = viewW*0.014;
+  for(const n of NAMES){
+    const bb = bboxes[n];
+    if(Math.max(bb.width,bb.height) >= minHit*2) continue;
+    const c = document.createElementNS(SVGNS,"circle");
+    c.setAttribute("cx", bb.x+bb.width/2);
+    c.setAttribute("cy", bb.y+bb.height/2);
+    c.setAttribute("r", minHit);
+    c.setAttribute("class","st st-hit");
+    c.setAttribute("tabindex","-1");
+    c.setAttribute("aria-hidden","true");
+    c.addEventListener("click",()=>onPick(n));
+    gShapes.appendChild(c);
   }
 }
 
@@ -1538,8 +1567,8 @@ const zoomBtn=el("zoom");
 let zoomed=false;
 zoomBtn.addEventListener("click",()=>{
   zoomed=!zoomed;
-  svg.setAttribute("viewBox",zoomed?NE_VIEW:FULL_VIEW);
-  zoomBtn.textContent=zoomed?"Ganze USA zeigen":"Nordosten heranzoomen";
+  svg.setAttribute("viewBox",zoomed?VIEW_ZOOM:VIEW_FULL);
+  zoomBtn.textContent=zoomed?zoomOutLabel:zoomInLabel;
 });
 
 /* ---------- Feier: Feuerwerk bei perfekter Runde ---------- */
@@ -1658,7 +1687,8 @@ function openMenu(){
 }
 
 const COUNTRY_CONFIG = {
-  usa:{data:DATA_USA, geo:GEO_USA, view:FULL_VIEW, shield:"50", tag:"Die 50 Bundesstaaten der USA", title:"Staatenkunde — die 50 US-Bundesstaaten lernen", zoomable:true,
+  usa:{data:DATA_USA, geo:GEO_USA, view:FULL_VIEW, shield:"50", tag:"Die 50 Bundesstaaten der USA", title:"Staatenkunde — die 50 US-Bundesstaaten lernen",
+    zoomView:NE_VIEW, zoomLabel:"Nordosten heranzoomen", zoomOutLabel:"Ganze USA zeigen",
     flagKind:"letters", flagLabel:"USA", flagColors:["#D0483F","#F4F7F9","#5C7CFA"]},
   ch:{data:DATA_CH, geo:GEO_CH, view:CH_VIEW, shield:"26", tag:"Die 26 Kantone der Schweiz", title:"Staatenkunde — die 26 Schweizer Kantone lernen",
     flagKind:"ch", flagColors:["#D52B1E","#F4F7F9"]},
@@ -1679,6 +1709,7 @@ const COUNTRY_CONFIG = {
   th:{data:DATA_TH, geo:GEO_TH, view:TH_VIEW, shield:"77", tag:"Die 77 Provinzen Thailands", title:"Staatenkunde — Thailands Provinzen lernen",
     flagKind:"letters", flagLabel:"TH", flagColors:["#A51931","#F4F7F9","#2D2A4A"]},
   eu:{data:DATA_EU, geo:GEO_EU, view:EU_VIEW, shield:"44", tag:"Die 44 Länder Europas", title:"Staatenkunde — die Länder Europas lernen",
+    zoomView:EU_ZOOM_VIEW, zoomLabel:"Kleinstaaten heranzoomen", zoomOutLabel:"Ganz Europa zeigen",
     flagKind:"letters", flagLabel:"EU", flagColors:["#003399","#FFCC00"]},
 };
 
@@ -1688,9 +1719,12 @@ function selectCountry(id){
   DATA = cfg.data;
   GEO = cfg.geo;
   VIEW_FULL = cfg.view;
+  VIEW_ZOOM = cfg.zoomView || null;
+  zoomInLabel = cfg.zoomLabel || "";
+  zoomOutLabel = cfg.zoomOutLabel || "";
   zoomed = false;
-  zoomBtn.hidden = !cfg.zoomable;
-  if(cfg.zoomable) zoomBtn.textContent = "Nordosten heranzoomen";
+  zoomBtn.hidden = !cfg.zoomView;
+  if(cfg.zoomView) zoomBtn.textContent = zoomInLabel;
   shieldEl.textContent = cfg.shield;
   tagEl.textContent = cfg.tag;
   document.title = cfg.title;
