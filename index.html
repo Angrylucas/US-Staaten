@@ -20,6 +20,9 @@
     --amber:#F4B233;
     --amber-hi:#FFC85C;
     --amber-ink:#241A08;
+    --violet:#7C6FE8;
+    --violet-hi:#9B90F2;
+    --violet-dark:#4E44A8;
     --ok:#3FA36B;
     --bad:#E0685F;
     --ink:#F3F7F9;
@@ -78,14 +81,21 @@
   }
   h1{font-size:21px;margin:0;font-weight:700;letter-spacing:-.015em;font-family:var(--sans)}
   .tag{margin:2px 0 0;font-family:var(--sans);font-weight:500;font-size:12.5px;letter-spacing:.01em;color:var(--muted)}
-  .modes{display:flex;gap:4px;background:var(--panel);padding:5px;border-radius:11px;border:1px solid var(--line);box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
+  .modes{display:flex;gap:5px;background:var(--panel);padding:6px;border-radius:13px;border:1px solid var(--line);box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
   .tab{
     appearance:none;border:0;background:transparent;color:var(--muted);cursor:pointer;
-    font-family:var(--sans);font-weight:700;font-size:12.5px;letter-spacing:.02em;
-    padding:9px 15px;border-radius:7px;transition:background .2s var(--ease),color .2s var(--ease);
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.005em;
+    padding:11px 18px;border-radius:9px;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease);
   }
-  .tab:hover{color:var(--ink)}
-  .tab[aria-selected="true"]{background:var(--sign);color:#fff;box-shadow:var(--shadow-sm)}
+  .tab:hover{color:var(--ink);transform:translateY(-1px)}
+  .tab-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.4;transition:opacity .2s var(--ease)}
+  #tab-find{--tab-color:var(--sign-hi)}
+  #tab-name{--tab-color:var(--violet)}
+  #tab-learn{--tab-color:var(--amber)}
+  .tab[aria-selected="true"]{background:var(--tab-color);color:#fff;box-shadow:var(--shadow-md)}
+  .tab[aria-selected="true"] .tab-dot{opacity:1;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+  .tab:not([aria-selected="true"]) .tab-dot{background:var(--tab-color);opacity:.85}
 
   /* ---------- Layout ---------- */
   main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:start}
@@ -249,7 +259,26 @@
   .flag-de span:nth-child(1){background:#000}
   .flag-de span:nth-child(2){background:#DD0000}
   .flag-de span:nth-child(3){background:#FFCE00}
-  .menu-title{font-family:var(--sans);font-size:clamp(24px,4vw,32px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+  .menu-title{font-family:var(--sans);font-size:clamp(22px,3.6vw,28px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+  .menu-title:not(:first-of-type){margin-top:6px}
+  .mode-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0 38px;max-width:760px;padding:0 20px}
+  .mode-card{
+    appearance:none;cursor:pointer;text-align:left;width:225px;position:relative;
+    background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;
+    padding:16px 18px;display:flex;flex-direction:column;gap:6px;
+    box-shadow:var(--shadow-sm);
+    transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease);
+  }
+  .mode-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .mode-card-title{font-family:var(--sans);font-size:17px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:9px}
+  .mode-card-title::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--muted-soft);flex:none;transition:box-shadow .2s var(--ease)}
+  .mode-card-sub{font-size:12.5px;font-weight:500;color:var(--muted);line-height:1.4;padding-left:18px}
+  .mode-card[data-mode="find"][aria-checked="true"]{border-color:var(--sign-hi);background:#132A22;box-shadow:0 0 0 1px var(--sign-hi),var(--shadow-md)}
+  .mode-card[data-mode="find"][aria-checked="true"] .mode-card-title::before{background:var(--sign-hi);box-shadow:0 0 0 3px rgba(15,136,99,.28)}
+  .mode-card[data-mode="name"][aria-checked="true"]{border-color:var(--violet);background:#211C3D;box-shadow:0 0 0 1px var(--violet),var(--shadow-md)}
+  .mode-card[data-mode="name"][aria-checked="true"] .mode-card-title::before{background:var(--violet);box-shadow:0 0 0 3px rgba(124,111,232,.28)}
+  .mode-card[data-mode="learn"][aria-checked="true"]{border-color:var(--amber);background:#2E2510;box-shadow:0 0 0 1px var(--amber),var(--shadow-md)}
+  .mode-card[data-mode="learn"][aria-checked="true"] .mode-card-title::before{background:var(--amber);box-shadow:0 0 0 3px rgba(244,178,51,.28)}
   .menu-grid{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:8px;max-width:980px;padding:0 20px}
   .menu-card{
     appearance:none;cursor:pointer;text-align:left;min-width:220px;position:relative;overflow:hidden;
@@ -294,9 +323,9 @@
     <div class="headerRight">
       <button class="btn" id="menuBtn">Menü</button>
       <nav class="modes" role="tablist" aria-label="Spielmodus">
-        <button class="tab" role="tab" id="tab-find" aria-selected="true" data-mode="find">Modus 1 · Finden</button>
-        <button class="tab" role="tab" id="tab-name" aria-selected="false" data-mode="name">Modus 2 · Benennen</button>
-        <button class="tab" role="tab" id="tab-learn" aria-selected="false" data-mode="learn">Modus 3 · Lernen</button>
+        <button class="tab" role="tab" id="tab-find" aria-selected="true" data-mode="find"><span class="tab-dot"></span>Finden</button>
+        <button class="tab" role="tab" id="tab-name" aria-selected="false" data-mode="name"><span class="tab-dot"></span>Benennen</button>
+        <button class="tab" role="tab" id="tab-learn" aria-selected="false" data-mode="learn"><span class="tab-dot"></span>Lernen</button>
       </nav>
     </div>
   </header>
@@ -374,9 +403,24 @@
     </aside>
   </main>
 
-  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Land wählen">
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Land und Modus wählen">
     <div class="celebrate-inner">
       <p class="celebrate-sub">Staatenkunde</p>
+      <div class="menu-title">Wie möchtest du lernen?</div>
+      <div class="mode-grid" id="menuModes" role="radiogroup" aria-label="Modus wählen">
+        <button class="mode-card" data-mode="find" role="radio" aria-checked="true">
+          <span class="mode-card-title">Finden</span>
+          <span class="mode-card-sub">Klicke den genannten Ort auf der Karte.</span>
+        </button>
+        <button class="mode-card" data-mode="name" role="radio" aria-checked="false">
+          <span class="mode-card-title">Benennen</span>
+          <span class="mode-card-sub">Klicke eine Fläche und tippe ihren Namen.</span>
+        </button>
+        <button class="mode-card" data-mode="learn" role="radio" aria-checked="false">
+          <span class="mode-card-title">Lernen</span>
+          <span class="mode-card-sub">Fakten &amp; Eselsbrücken durchblättern.</span>
+        </button>
+      </div>
       <div class="menu-title">Wähle ein Land</div>
       <div class="menu-grid">
         <button class="menu-card" data-country="usa">
@@ -1794,7 +1838,7 @@ function renderSign(){
     if(!s.current){
       sign.classList.add("is-idle");
       answerbar.hidden=true;
-      signEyebrow.textContent="Modus 2 · Benennen";
+      signEyebrow.textContent="Benennen";
       signHead.textContent = s.solved.size+s.missed.size>=NAMES.length ? `Alle ${NAMES.length} benannt` : `Klick ${artIndefAcc()} ${unitLabel(false)} an`;
       signSub.textContent = s.solved.size+s.missed.size>=NAMES.length ? "Mit „Neu starten“ geht es wieder los." : "Such dir einen aus — oder lass dir mit „Überspringen“ einen zuteilen.";
       return;
@@ -1823,7 +1867,7 @@ function renderLearnSign(){
   sign.classList.remove("is-idle");
   answerbar.hidden = true;
   choicesBox.hidden = true; choicesBox.textContent="";
-  signEyebrow.textContent = `Modus 3 · Lernen · Nr. ${learnIdx+1} von ${NAMES.length}`;
+  signEyebrow.textContent = `Lernen · Nr. ${learnIdx+1} von ${NAMES.length}`;
   signHead.textContent = name;
   signSub.textContent = DATA[name].ab;
 }
@@ -2057,25 +2101,27 @@ function restartCurrentMode(){
 }
 el("reset").addEventListener("click",restartCurrentMode);
 
+function switchToMode(mode){
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.mode===mode)));
+  S.mode=mode;
+  say("");
+  const isLearn = S.mode==="learn";
+  statPanel.hidden = isLearn;
+  hintPanel.hidden = isLearn;
+  controlPanel.hidden = isLearn;
+  learnPanel.hidden = !isLearn;
+  if(isLearn){
+    renderLearn();
+  }else if(S.mode==="find" && !S.find.current && S.find.queue.length){
+    nextFind();
+  }else{
+    render();
+  }
+  if(S.mode==="name" && S.name.current) answer.focus();
+}
+
 document.querySelectorAll(".tab").forEach(t=>{
-  t.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
-    S.mode=t.dataset.mode;
-    say("");
-    const isLearn = S.mode==="learn";
-    statPanel.hidden = isLearn;
-    hintPanel.hidden = isLearn;
-    controlPanel.hidden = isLearn;
-    learnPanel.hidden = !isLearn;
-    if(isLearn){
-      renderLearn();
-    }else if(S.mode==="find" && !S.find.current && S.find.queue.length){
-      nextFind();
-    }else{
-      render();
-    }
-    if(S.mode==="name" && S.name.current) answer.focus();
-  });
+  t.addEventListener("click",()=>switchToMode(t.dataset.mode));
 });
 
 const zoomBtn=el("zoom");
@@ -2201,6 +2247,14 @@ function openMenu(){
   menuEl.hidden = false;
 }
 
+let selectedMenuMode = "find";
+document.querySelectorAll(".mode-card").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    selectedMenuMode = b.dataset.mode;
+    document.querySelectorAll(".mode-card").forEach(x=>x.setAttribute("aria-checked", String(x===b)));
+  });
+});
+
 const COUNTRY_CONFIG = {
   usa:{data:DATA_USA, geo:GEO_USA, view:FULL_VIEW, shield:"50", tag:"Die 50 Bundesstaaten der USA", title:"Staatenkunde — die 50 US-Bundesstaaten lernen",
     zoomView:NE_VIEW, zoomLabel:"Nordosten heranzoomen", zoomOutLabel:"Ganze USA zeigen",
@@ -2231,7 +2285,7 @@ const COUNTRY_CONFIG = {
     flagKind:"letters", flagLabel:"WELT", flagColors:["#1E88E5","#F4F7F9","#43A047"]},
 };
 
-function selectCountry(id){
+function selectCountry(id, mode){
   COUNTRY = id;
   const cfg = COUNTRY_CONFIG[id];
   DATA = cfg.data;
@@ -2250,23 +2304,16 @@ function selectCountry(id){
   NAMES = Object.keys(DATA);
   svg.setAttribute("viewBox", VIEW_FULL);
   answer.setAttribute("aria-label", `Name ${genUnit()}`);
-  S.mode = "find";
   learnIdx = 0;
-  statPanel.hidden = false;
-  hintPanel.hidden = false;
-  controlPanel.hidden = false;
-  learnPanel.hidden = true;
-  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", String(x.dataset.mode==="find")));
   S.find = freshSession();
   S.name = freshSession();
   buildMap();
   menuEl.hidden = true;
-  say("");
-  nextFind();
+  switchToMode(mode || "find");
 }
 
 document.querySelectorAll(".menu-card").forEach(b=>{
-  b.addEventListener("click", ()=>selectCountry(b.dataset.country));
+  b.addEventListener("click", ()=>selectCountry(b.dataset.country, selectedMenuMode));
 });
 el("menuBtn").addEventListener("click", openMenu);
 
