@@ -8,7 +8,9 @@
 
 ## Palette
 
-Restrained dark ground with three functional accents, each tied to one game mode:
+Two themes share one token system, toggled via `[data-theme]` on `<html>` (persisted to `localStorage`, defaulting to dark):
+
+**Dark** (default, unchanged from the original build) — restrained asphalt ground with three functional accents, each tied to one game mode:
 
 - `--asphalt` `#0A1016` / `--panel` `#121B24` / `--panel2` `#17222C` / `--panel3` `#1D2A35` — surface layers, darkest to lightest.
 - `--sign` `#0B6B4F` / `--sign-hi` `#0F8863` — "Finden" mode, the announcement banner.
@@ -16,7 +18,19 @@ Restrained dark ground with three functional accents, each tied to one game mode
 - `--amber` `#F4B233` / `--amber-hi` `#FFC85C` — "Lernen" mode, hints, primary hover/focus accent.
 - `--ink` `#F3F7F9` / `--muted` `#8CA0AF` / `--muted-soft` `#5E7383` — text hierarchy.
 
-Body background is a subtle graticule: two 1px hairline grids (`rgba(255,255,255,.014)`, 72px pitch) plus two very low-opacity radial washes in sign-green and violet, over the base asphalt gradient — an atlas/map association at near-zero visual weight, never competing with content.
+**Light** (`[data-theme="light"]`) — the same three-accent system reworked as pastels on a soft lavender-white ground, since pastel tone only reads on a light surface:
+
+- `--asphalt` `#F6F4FB` / `--panel` `#FFFFFF` / `--panel2` `#F8F5FC` / `--panel3` `#EFE9FA`.
+- `--sign` `#8FE0BE` (pastel mint), `--violet` `#CBBFF9` (pastel lavender), `--amber` `#FFD9A0` (pastel apricot).
+- `--ink` `#241F35` / `--muted` `#786F92` / `--muted-soft` `#948AAE`.
+
+Every place an accent sits *under* text (selected tabs, the route-sign banner, the solid button, hint/fact labels, focus rings) has its own ink/label token (`--tab-ink`, `--sign-ink`, `--solid-ink`/`--solid-bg`, `--amber-label`, `--focus-ring`) rather than a hardcoded white — pastel fills are light, so white-on-accent (which the dark theme can get away with) would be unreadable in light mode. `--focus-ring` in particular is a saturated caramel in light mode, not the pale `--amber-hi` fill, because a pastel focus outline on a white page would be nearly invisible for keyboard users.
+
+Map state colors (`--map-solved`, `--map-missed`, `--map-label-ink`/`-outline`, `--map-bg-a`/`-b`), the mode-card selected-state tints and glows (`--mode-*-tint`, `--sign-glow`/`--violet-glow`/`--amber-glow`), the modal backdrop (`--backdrop`), and the ok/bad feedback text (`--feedback-ok`/`-bad`, distinct from the `--ok`/`--bad` map-fill tokens since text needs to stay dark-enough-to-read while fills can go full pastel) are all themed the same way.
+
+Body background is a subtle graticule: two 1px hairline grids plus two low-opacity radial washes in the mode accents, over the base ground gradient — an atlas/map association at near-zero visual weight, themed via `--grid-line`/`--wash-a`/`--wash-b`.
+
+The header shield and every route-shield badge keep one constant navy plate (`#173250→#0E2136`) in **both** themes — it's a fixed brand anchor, not a surface color, and reads fine against either ground.
 
 ## Type
 
@@ -42,3 +56,7 @@ Menu/mode cards fade + rise in on open (`cardIn`, 400-450ms, staggered ~35-45ms 
 ## Layout
 
 Both overlay grids (`.mode-grid`, `.menu-grid`) and their shared `.celebrate-inner` container are explicitly `width:100%` (with `box-sizing:border-box` on the container) so percentage/wrap sizing resolves against the actual viewport rather than shrink-to-fit — required because both sit inside `align-items:center` flex ancestors, which otherwise silently overflow narrow viewports.
+
+## Theme Toggle
+
+A small icon button (`#themeToggle`, first item in `.headerRight`, sun/moon SVGs swapped via `[data-theme]` CSS) flips `document.documentElement.dataset.theme` between `dark`/`light` and persists the choice to `localStorage` (`staatenkunde-theme`). No stored preference and no `prefers-color-scheme` check → defaults to dark, so the original look is unchanged for anyone who never touches the toggle. A tiny inline script in `<head>` applies the stored theme before first paint to avoid a flash of the wrong theme.
