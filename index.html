@@ -56,7 +56,13 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    background:linear-gradient(175deg, #0D141B 0%, var(--asphalt) 46%, #080D12 100%);
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 1px, transparent 1px 72px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.014) 0 1px, transparent 1px 72px),
+      radial-gradient(1100px 720px at 12% -8%, rgba(15,136,99,.07), transparent 60%),
+      radial-gradient(900px 680px at 104% 4%, rgba(124,111,232,.055), transparent 58%),
+      linear-gradient(175deg, #0D141B 0%, var(--asphalt) 46%, #080D12 100%);
+    background-attachment:fixed;
     color:var(--ink);
     font-family:var(--sans);
     font-weight:500;
@@ -228,7 +234,7 @@
   }
   .celebrate[hidden],.menu[hidden]{display:none}
   .celebrate canvas{position:absolute;inset:0;width:100%;height:100%}
-  .celebrate-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px;margin:auto 0}
+  .celebrate-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;box-sizing:border-box;padding:20px;margin:auto 0}
   .celebrate-text{display:flex;gap:.05em;font-family:var(--sans);font-weight:700;line-height:1;font-size:clamp(64px,18vw,180px)}
   .celebrate-text[hidden]{display:none}
   .celebrate-text .letter{
@@ -261,12 +267,16 @@
   .flag-de span:nth-child(3){background:#FFCE00}
   .menu-title{font-family:var(--sans);font-size:clamp(22px,3.6vw,28px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
   .menu-title:not(:first-of-type){margin-top:6px}
-  .mode-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0 38px;max-width:760px;padding:0 20px}
+  .menu-kicker{font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-soft);margin:0 0 4px;text-align:center}
+  @keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+  .mode-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0 38px;width:100%;max-width:760px;padding:0 20px}
   .mode-card{
     appearance:none;cursor:pointer;text-align:left;width:225px;position:relative;
     background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;
     padding:16px 18px;display:flex;flex-direction:column;gap:6px;
     box-shadow:var(--shadow-sm);
+    animation:cardIn .4s var(--ease) backwards;
+    animation-delay:calc(var(--i,0) * 45ms);
     transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease);
   }
   .mode-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
@@ -279,35 +289,35 @@
   .mode-card[data-mode="name"][aria-checked="true"] .mode-card-title::before{background:var(--violet);box-shadow:0 0 0 3px rgba(124,111,232,.28)}
   .mode-card[data-mode="learn"][aria-checked="true"]{border-color:var(--amber);background:#2E2510;box-shadow:0 0 0 1px var(--amber),var(--shadow-md)}
   .mode-card[data-mode="learn"][aria-checked="true"] .mode-card-title::before{background:var(--amber);box-shadow:0 0 0 3px rgba(244,178,51,.28)}
-  .menu-grid{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:8px;max-width:980px;padding:0 20px}
+  .menu-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));
+    gap:14px;margin-top:8px;width:100%;max-width:980px;padding:0 20px;
+  }
   .menu-card{
-    appearance:none;cursor:pointer;text-align:left;min-width:220px;position:relative;overflow:hidden;
+    appearance:none;cursor:pointer;text-align:left;position:relative;
     background:var(--panel2);border:1px solid var(--line);border-radius:16px;
-    padding:24px 24px 22px;display:flex;flex-direction:column;gap:6px;
+    padding:56px 22px 22px;display:flex;flex-direction:column;gap:6px;
     box-shadow:var(--shadow-md);
+    animation:cardIn .45s var(--ease) backwards;
+    animation-delay:calc(var(--i,0) * 35ms);
     transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease);
   }
   .menu-card::before{
-    content:"";position:absolute;top:0;left:0;right:0;height:4px;
-    background:var(--flag-a,var(--amber)) linear-gradient(90deg,var(--flag-a,var(--amber)) 50%,var(--flag-b,var(--amber)) 50%);
-    opacity:.9;
+    content:attr(data-abbr);position:absolute;top:18px;left:22px;
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:44px;height:28px;padding:0 8px;
+    background:linear-gradient(160deg,#173250,#0E2136);color:#DCE7EF;
+    border:1px solid rgba(255,255,255,.22);border-radius:7px;
+    font-family:var(--mono);font-weight:700;font-size:11.5px;letter-spacing:.05em;
+    box-shadow:var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.1);
+    transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
   }
   .menu-card:hover{border-color:var(--amber);background:var(--panel3);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-  .menu-card-title{font-family:var(--sans);font-size:25px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+  .menu-card:hover::before{border-color:var(--amber);box-shadow:0 0 0 3px rgba(244,178,51,.22), var(--shadow-sm)}
+  .menu-card-title{font-family:var(--sans);font-size:25px;font-weight:700;letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .menu-card-title::after{content:"→";font-weight:500;font-size:16px;color:var(--amber);opacity:0;transform:translateX(-4px);transition:opacity .2s var(--ease),transform .2s var(--ease)}
+  .menu-card:hover .menu-card-title::after{opacity:1;transform:none}
   .menu-card-sub{font-family:var(--mono);font-weight:500;font-size:11.5px;letter-spacing:.05em;color:var(--muted)}
-
-  .menu-card[data-country="usa"]{--flag-a:#B22234;--flag-b:#3C3B6E}
-  .menu-card[data-country="ch"]{--flag-a:#D52B1E;--flag-b:#D52B1E}
-  .menu-card[data-country="de"]{--flag-a:#000000;--flag-b:#DD0000}
-  .menu-card[data-country="at"]{--flag-a:#ED2939;--flag-b:#ED2939}
-  .menu-card[data-country="ca"]{--flag-a:#FF0000;--flag-b:#FF0000}
-  .menu-card[data-country="au"]{--flag-a:#00247D;--flag-b:#FF0000}
-  .menu-card[data-country="it"]{--flag-a:#009246;--flag-b:#CE2B37}
-  .menu-card[data-country="se"]{--flag-a:#006AA7;--flag-b:#FECC00}
-  .menu-card[data-country="jp"]{--flag-a:#BC002D;--flag-b:#BC002D}
-  .menu-card[data-country="th"]{--flag-a:#A51931;--flag-b:#2D2A4A}
-  .menu-card[data-country="eu"]{--flag-a:#003399;--flag-b:#FFCC00}
-  .menu-card[data-country="world"]{--flag-a:#1E88E5;--flag-b:#43A047}
 </style>
 </head>
 <body>
@@ -408,66 +418,67 @@
       <p class="celebrate-sub">Staatenkunde</p>
       <div class="menu-title">Wie möchtest du lernen?</div>
       <div class="mode-grid" id="menuModes" role="radiogroup" aria-label="Modus wählen">
-        <button class="mode-card" data-mode="find" role="radio" aria-checked="true">
+        <button class="mode-card" data-mode="find" role="radio" aria-checked="true" style="--i:0">
           <span class="mode-card-title">Finden</span>
           <span class="mode-card-sub">Klicke den genannten Ort auf der Karte.</span>
         </button>
-        <button class="mode-card" data-mode="name" role="radio" aria-checked="false">
+        <button class="mode-card" data-mode="name" role="radio" aria-checked="false" style="--i:1">
           <span class="mode-card-title">Benennen</span>
           <span class="mode-card-sub">Klicke eine Fläche und tippe ihren Namen.</span>
         </button>
-        <button class="mode-card" data-mode="learn" role="radio" aria-checked="false">
+        <button class="mode-card" data-mode="learn" role="radio" aria-checked="false" style="--i:2">
           <span class="mode-card-title">Lernen</span>
           <span class="mode-card-sub">Fakten &amp; Eselsbrücken durchblättern.</span>
         </button>
       </div>
+      <p class="menu-kicker">12 Regionen</p>
       <div class="menu-title">Wähle ein Land</div>
       <div class="menu-grid">
-        <button class="menu-card" data-country="usa">
+        <button class="menu-card" data-country="usa" data-abbr="USA" style="--i:0">
           <span class="menu-card-title">USA</span>
           <span class="menu-card-sub">50 Bundesstaaten</span>
         </button>
-        <button class="menu-card" data-country="ch">
+        <button class="menu-card" data-country="ch" data-abbr="CHE" style="--i:1">
           <span class="menu-card-title">Schweiz</span>
           <span class="menu-card-sub">26 Kantone</span>
         </button>
-        <button class="menu-card" data-country="de">
+        <button class="menu-card" data-country="de" data-abbr="DEU" style="--i:2">
           <span class="menu-card-title">Deutschland</span>
           <span class="menu-card-sub">16 Bundesländer</span>
         </button>
-        <button class="menu-card" data-country="at">
+        <button class="menu-card" data-country="at" data-abbr="AUT" style="--i:3">
           <span class="menu-card-title">Österreich</span>
           <span class="menu-card-sub">9 Bundesländer</span>
         </button>
-        <button class="menu-card" data-country="ca">
+        <button class="menu-card" data-country="ca" data-abbr="CAN" style="--i:4">
           <span class="menu-card-title">Kanada</span>
           <span class="menu-card-sub">13 Provinzen</span>
         </button>
-        <button class="menu-card" data-country="au">
+        <button class="menu-card" data-country="au" data-abbr="AUS" style="--i:5">
           <span class="menu-card-title">Australien</span>
           <span class="menu-card-sub">8 Bundesstaaten</span>
         </button>
-        <button class="menu-card" data-country="it">
+        <button class="menu-card" data-country="it" data-abbr="ITA" style="--i:6">
           <span class="menu-card-title">Italien</span>
           <span class="menu-card-sub">20 Regionen</span>
         </button>
-        <button class="menu-card" data-country="se">
+        <button class="menu-card" data-country="se" data-abbr="SWE" style="--i:7">
           <span class="menu-card-title">Schweden</span>
           <span class="menu-card-sub">21 Provinzen</span>
         </button>
-        <button class="menu-card" data-country="jp">
+        <button class="menu-card" data-country="jp" data-abbr="JPN" style="--i:8">
           <span class="menu-card-title">Japan</span>
           <span class="menu-card-sub">47 Präfekturen</span>
         </button>
-        <button class="menu-card" data-country="th">
+        <button class="menu-card" data-country="th" data-abbr="THA" style="--i:9">
           <span class="menu-card-title">Thailand</span>
           <span class="menu-card-sub">77 Provinzen</span>
         </button>
-        <button class="menu-card" data-country="eu">
+        <button class="menu-card" data-country="eu" data-abbr="EUR" style="--i:10">
           <span class="menu-card-title">Europa</span>
           <span class="menu-card-sub">44 Länder</span>
         </button>
-        <button class="menu-card" data-country="world">
+        <button class="menu-card" data-country="world" data-abbr="WLD" style="--i:11">
           <span class="menu-card-title">Welt</span>
           <span class="menu-card-sub">195 Länder</span>
         </button>
