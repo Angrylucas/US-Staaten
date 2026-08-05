@@ -10,19 +10,21 @@
 
 Two themes share one token system, toggled via `[data-theme]` on `<html>` (persisted to `localStorage`, defaulting to dark):
 
-**Dark** (default, unchanged from the original build) — restrained asphalt ground with three functional accents, each tied to one game mode:
+**Dark** (default, structurally unchanged from the original build; accent hues updated per a later request) — restrained asphalt ground with three functional accents, each tied to one game mode:
 
 - `--asphalt` `#0A1016` / `--panel` `#121B24` / `--panel2` `#17222C` / `--panel3` `#1D2A35` — surface layers, darkest to lightest.
-- `--sign` `#0B6B4F` / `--sign-hi` `#0F8863` — "Finden" mode, the announcement banner.
+- `--sign` `#1B6FA8` / `--sign-hi` `#2E93D6` — "Finden" mode (sky blue), the announcement banner.
 - `--violet` `#7C6FE8` — "Benennen" mode.
-- `--amber` `#F4B233` / `--amber-hi` `#FFC85C` — "Lernen" mode, hints, primary hover/focus accent.
+- `--amber` `#E85D8A` / `--amber-hi` `#F2879E` — "Lernen" mode (rose/pink), hints, primary focus accent.
 - `--ink` `#F3F7F9` / `--muted` `#8CA0AF` / `--muted-soft` `#5E7383` — text hierarchy.
 
 **Light** (`[data-theme="light"]`) — the same three-accent system reworked as pastels on a soft lavender-white ground, since pastel tone only reads on a light surface:
 
 - `--asphalt` `#F6F4FB` / `--panel` `#FFFFFF` / `--panel2` `#F8F5FC` / `--panel3` `#EFE9FA`.
-- `--sign` `#8FE0BE` (pastel mint), `--violet` `#CBBFF9` (pastel lavender), `--amber` `#FFD9A0` (pastel apricot).
+- `--sign` `#A6D8F7` (pastel sky blue), `--violet` `#CBBFF9` (pastel lavender), `--amber` `#FBCBDA` (pastel rose).
 - `--ink` `#241F35` / `--muted` `#786F92` / `--muted-soft` `#948AAE`.
+
+`--sign`/`--amber` were originally green/gold (matching the "highway sign" metaphor literally); a later request moved "Finden" to blue and "Lernen" to pink in both themes, keeping "Benennen"'s violet untouched. `--ok`/`--bad` (map flash colors) and `--feedback-ok`/`--feedback-bad` (correct/wrong text) stayed green/red on purpose — those are universal correct/incorrect semantics, not mode branding, and weren't part of that request.
 
 Every place an accent sits *under* text (selected tabs, the route-sign banner, the solid button, hint/fact labels, focus rings) has its own ink/label token (`--tab-ink`, `--sign-ink`, `--solid-ink`/`--solid-bg`, `--amber-label`, `--focus-ring`) rather than a hardcoded white — pastel fills are light, so white-on-accent (which the dark theme can get away with) would be unreadable in light mode. `--focus-ring` in particular is a saturated caramel in light mode, not the pale `--amber-hi` fill, because a pastel focus outline on a white page would be nearly invisible for keyboard users.
 
